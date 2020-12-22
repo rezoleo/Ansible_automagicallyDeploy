@@ -1,0 +1,40 @@
+- name: "Install essentials"
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - vim
+      - molly-guard
+      - htop
+      - iftop
+    state: present
+
+- name: "Color ls"
+  ansible.builtin.blockinfile:
+    path: /root/.bashrc
+    marker: "# {mark} ANSIBLE COLOR LS"
+    block: |
+      export LS_OPTIONS='--color=auto'
+      eval "`dircolors`"
+      alias ls='ls $LS_OPTIONS'
+      alias ll='ls $LS_OPTIONS -l'
+      alias l='ls $LS_OPTIONS -lA'
+
+- name: "Color root shell"
+  ansible.builtin.lineinfile:
+    path: /root/.bashrc
+    regexp: '^export PS1='
+    line: export PS1='\[\033[00;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00;31m\]\$\[\033[00m\] '
+
+- name: "Generate MOTD banner"
+  ansible.builtin.command: "figlet {{ ansible_hostname }} -f slant -w 120"
+  delegate_to: localhost
+  become: false
+  register: motd
+  ignore_errors: yes
+
+- name: "Copy MOTD banner"
+  ansible.builtin.template:
+    src: 00-banner.j2
+    dest: /etc/update-motd.d/00-banner
+    mode: "755"
+  when: not motd.failed
