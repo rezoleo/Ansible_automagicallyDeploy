@@ -1,0 +1,25 @@
+# Creer user
+# Le rajouter au groupe sudo
+# Configurer le sudo sans mdp
+
+- name: "Configure Ansible user sudoer without password"
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Create an ansible user
+      ansible.builtin.user:
+        name: ansible
+
+    - name: Set authorized key for user ansible copying it from current user
+      ansible.posix.authorized_key:
+        user: ansible
+        state: present
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+
+    - name: Add the ansible user to passwordless sudoers
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+        validate: /usr/sbin/visudo -cf %s
