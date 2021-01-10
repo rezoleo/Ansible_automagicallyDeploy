@@ -2,5 +2,16 @@
 
 ## Prerequisites
 
-- `figlet` installed on the computer running Ansible (to generate the ASCII art
-  used in the MOTD banner)
+On the computer running the playbooks:
+  - A Python virtualenv with the [requirements](./requirements.txt) installed
+  - `figlet` installed, to generate the ASCII art used in the MOTD banner
+
+On the servers:
+  - a `ansible` user account with passwordless sudo (run the
+    [`create-ansible-user`](./create-ansible-user.yml) playbook for this)
+
+## Usage
+
+1. Export the Vault URL: `export VAULT_ADDR=https://<vault URL>`
+2. Login to Vault: `vault login -method=userpass -username=<username>` (you can use any other method)
+3. Execute a playbook: `ansible-playbook --inventory hosts deploy-server.yml`
