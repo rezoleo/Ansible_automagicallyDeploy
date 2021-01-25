@@ -15,7 +15,13 @@
       ansible.posix.authorized_key:
         user: ansible
         state: present
-        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"
+        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"  # TODO: lookup SSH key from Vault
+
+    - name: Install sudo
+      ansible.builtin.apt:
+        update_cache: yes
+        name: sudo
+        state: present
 
     - name: Add the ansible user to passwordless sudoers
       ansible.builtin.lineinfile:

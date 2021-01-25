@@ -21,7 +21,7 @@
   notify: restart snmpd
 
   # Script downloaded from https://gitlab.com/observium/distroscript
-- name: "Copy script Observium"
+- name: "Copy distro script from Observium"
   ansible.builtin.copy:
     src: distro
     dest: /usr/bin/distro
@@ -30,24 +30,19 @@
     mode: "0755"
   notify: restart snmpd
 
-- name: "Copy list of servers to monitor to Observium"
-  ansible.builtin.template:
-    src: add_device_input.j2
-    dest: /root/devices_list.txt
-  run_once: true
-  delegate_to: ubuntu-ansible-2 # TODO: argos
+- name: "Start SNMP service"
+  ansible.builtin.systemd:
+    name: snmpd
+    state: started
+    enabled: yes
+
+- name: "Force handlers to restart snmpd for the configuration to be OK when adding in Observium"
+  ansible.builtin.meta: flush_handlers
 
 - name: "Add servers to Observium"
-  ansible.builtin.command: ls # TODO: "/opt/observium/add_device.php /root/devices_list.txt"
+  ansible.builtin.command: "/opt/observium/add_device.php {{ ansible_hostname }} {{ community_string }} {{ snmp_version }}"
   register: add_device
-  changed_when: ' "Already got device" not in add_device.stdout '
-  failed_when: '"Could not resolve" in add_device.stdout'
-  run_once: true
-  delegate_to: ubuntu-ansible-2 #TODO: argos
-
-- name: "Delete devices list from Observium"
-  ansible.builtin.file:
-    path: /root/devices_list.txt
-    state: absent
-  run_once: true
-  delegate_to: ubuntu-ansible-2 # TODO: argos
+  changed_when: '"Added device" in add_device.stdout'
+  failed_when: '"Devices failed" in add_device.stdout and "Already got device" not in add_device.stdout'
+  ignore_errors: yes
+  delegate_to: argos

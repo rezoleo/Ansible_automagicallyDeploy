@@ -1,13 +1,14 @@
 # DO NOT TOUCH
 # Automatically deployed via Ansible
 
-com2sec readonly default {{ community_string }}
+{% for allowed_host in snmp_allowed_hosts %}
+com2sec readonly {{ allowed_host }} {{ community_string }}
+{% endfor %}
 
 group MyROGroup v1         readonly
 group MyROGroup v2c        readonly
 group MyROGroup usm        readonly
 view all    included  .1   80
-access MyROGroup ""      any       noauth    exact  all    none   none
 access MyROGroup ""      any       noauth    exact  all    none   none
 syslocation {{ server_location }}
 syscontact Rezoleo

@@ -1,4 +1,4 @@
 - name: "restart snmpd"
   ansible.builtin.systemd:
     name: snmpd
-    state: reloaded
+    state: restarted

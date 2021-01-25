@@ -1,3 +1,5 @@
 community_string: public
 server_location: Residence Leonard de Vinci
 snmp_version: v2c
+snmp_allowed_hosts:
+  - argos
