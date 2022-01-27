@@ -1,7 +1,7 @@
 - name: Install sshd
   ansible.builtin.apt:
     name:
-      - sshd
+      - ssh
     state: present
 
 - name: Download CA file from Vault
