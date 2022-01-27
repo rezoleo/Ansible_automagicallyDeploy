@@ -18,5 +18,5 @@
     state: present
     regexp: '^TrustedUserCAKeys'
     line: TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem
-    validate: /usr/sbin/sshd -f %s
+    validate: /usr/sbin/sshd -f -t %s
   notify: restart sshd
