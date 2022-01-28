@@ -6,7 +6,7 @@
 
 - name: Download CA file from Vault
   ansible.builtin.get_url:
-    url: https://vault.rezoleo.fr/v1/ssh-client-signer/public_key
+    url: https://vault.rezoleo.fr/v1/ssh/public_key
     dest: /etc/ssh/trusted-user-ca-keys.pem
     mode: '644'
     owner: 'root'
