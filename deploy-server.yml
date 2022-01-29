@@ -5,3 +5,4 @@
     - common
     - monitoring
     - ntp
+    - ssh-with-vault
