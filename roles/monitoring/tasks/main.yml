@@ -4,11 +4,28 @@
     name: snmpd
     state: present
 
-- name: "Retrieve SNMP community"
+- name: "Retrieve SNMPv3 password and passphrase"
   ansible.builtin.set_fact:
-    community_string: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/celestia:community_string') }}"
+    snmp_authpass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_authpass') }}"
+    snmp_cryptopass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_cryptopass') }}"
   run_once: true
   delegate_to: localhost
+  become: no
+
+- name: Gather facts using SNMP version 3
+  community.general.snmp_facts:
+    host: '{{ inventory_hostname }}'
+    version: v3
+    level: authPriv
+    integrity: sha
+    privacy: aes
+    username: '{{ snmp_user }}'
+    authkey: '{{ snmp_authpass }}'
+    privkey: '{{ snmp_cryptopass }}'
+  ignore_errors: yes
+  delegate_to: localhost
+  become: no
+  register: snmp_facts_results
 
 - name: "Configure SNMP"
   ansible.builtin.template:
@@ -20,15 +37,20 @@
     backup: yes
   notify: restart snmpd
 
-  # Script downloaded from https://gitlab.com/observium/distroscript
-- name: "Copy distro script from Observium"
-  ansible.builtin.copy:
-    src: distro
-    dest: /usr/bin/distro
-    owner: root
-    group: root
-    mode: "0755"
-  notify: restart snmpd
+- name: Setup SNMP v3 user
+  block:
+    - name: "Stop SNMP service"
+      ansible.builtin.systemd:
+        name: snmpd
+        state: stopped
+      
+    - name: CreateUser in /var/lib/snmp/snmpd.conf
+      ansible.builtin.lineinfile:
+        path: /var/lib/snmp/snmpd.conf
+        state: present
+        line: 'createUser {{ snmp_user }} SHA {{ snmp_authpass }} AES {{ snmp_cryptopass }}'
+
+  when: snmp_facts_results.failed
 
 - name: "Start SNMP service"
   ansible.builtin.systemd:
@@ -38,11 +60,3 @@
 
 - name: "Force handlers to restart snmpd for the configuration to be OK when adding in Observium"
   ansible.builtin.meta: flush_handlers
-
-- name: "Add servers to Observium"
-  ansible.builtin.command: "/opt/observium/add_device.php {{ ansible_hostname }} {{ community_string }} {{ snmp_version }}"
-  register: add_device
-  changed_when: '"Added device" in add_device.stdout'
-  failed_when: '"Devices failed" in add_device.stdout and "Already got device" not in add_device.stdout'
-  ignore_errors: yes
-  delegate_to: argos
