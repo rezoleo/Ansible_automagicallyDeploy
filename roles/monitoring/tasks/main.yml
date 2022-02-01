@@ -64,7 +64,7 @@
 
 - name: Check if device is on librenms
   ansible.builtin.uri:
-    url: https://librenms.rezoleo.fr/api/v0/devices/{{ inventory_hostname }}
+    url: https://librenms.rezoleo.fr/api/v0/devices/{{ ansible_hostname }}
     method: GET
     return_content: yes
     headers:
@@ -81,7 +81,8 @@
       X-Auth-Token: "{{ librenms_api_token }}"
     body_format: json
     body:
-      hostname: '{{ inventory_hostname }}'
+      hostname: '{{ ansible_hostname }}'
+      overwrite_ip: '{{ inventory_hostname }}'
       version: v3
       authlevel: authPriv
       authname: '{{ snmp_user }}'
@@ -93,7 +94,7 @@
 
 - name: Change SNMP version on librenms
   ansible.builtin.uri:
-    url: https://librenms.rezoleo.fr/api/v0/devices/{{ inventory_hostname }}
+    url: https://librenms.rezoleo.fr/api/v0/devices/{{ ansible_hostname }}
     method: PATCH
     return_content: yes
     headers:
