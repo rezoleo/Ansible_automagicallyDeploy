@@ -8,6 +8,7 @@
   ansible.builtin.set_fact:
     snmp_authpass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_authpass') }}"
     snmp_cryptopass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_cryptopass') }}"
+    librenms_api_token: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:librenms_api_token') }}"
   run_once: true
   delegate_to: localhost
   become: no
@@ -60,3 +61,59 @@
 
 - name: "Force handlers to restart snmpd for the configuration to be OK when adding in Observium"
   ansible.builtin.meta: flush_handlers
+
+- name: Check if device is on librenms
+  ansible.builtin.uri:
+    url: https://librenms.rezoleo.fr/api/v0/devices/{{ inventory_hostname }}
+    method: GET
+    return_content: yes
+    headers:
+      X-Auth-Token: "{{ librenms_api_token }}"
+  register: get_device_results
+  ignore_errors: yes
+
+- name: Add device to librenms
+  ansible.builtin.uri:
+    url: https://librenms.rezoleo.fr/api/v0/devices
+    method: POST
+    return_content: yes
+    headers:
+      X-Auth-Token: "{{ librenms_api_token }}"
+    body_format: json
+    body:
+      hostname: '{{ inventory_hostname }}'
+      version: v3
+      authlevel: authPriv
+      authname: '{{ snmp_user }}'
+      authpass: '{{ snmp_authpass }}'
+      authalgo: SHA
+      cryptopass: '{{ snmp_cryptopass }}'
+      cryptoalgo: AES
+  when: get_device_results.json.status != 'ok'
+
+- name: Change SNMP version on librenms
+  ansible.builtin.uri:
+    url: https://librenms.rezoleo.fr/api/v0/devices/{{ inventory_hostname }}
+    method: PATCH
+    return_content: yes
+    headers:
+      X-Auth-Token: "{{ librenms_api_token }}"
+    body_format: json
+    body:
+      field:
+        - snmpver
+        - authlevel
+        - authname
+        - authpass
+        - authalgo
+        - cryptopass
+        - cryptoalgo
+      data:
+        - v3
+        - authPriv
+        - '{{ snmp_user }}'
+        - '{{ snmp_authpass }}'
+        - SHA
+        - '{{ snmp_cryptopass }}'
+        - AES
+  when: get_device_results.json.status == 'ok' and get_device_results.json.devices[0].snmpver != 'v3'
