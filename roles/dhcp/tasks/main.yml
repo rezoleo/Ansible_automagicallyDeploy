@@ -1,0 +1,53 @@
+- name: "Install dhcp"
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - isc-dhcp-server
+    state: present
+
+- name: "Copy isc-dhcp config"
+  ansible.builtin.copy:
+    src: dhcp/isc-dhcp-server
+    dest: /etc/default/isc-dhcp-server
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart isc-dhcp-server
+
+- name: "Copy dhcpd config"
+  ansible.builtin.copy:
+    src: dhcp/dhcpd.conf
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart isc-dhcp-server
+
+- name: "Copy re2o-tools"
+  ansible.builtin.copy:
+    src: re2o-tools/
+    dest: /root/re2o-tools
+    owner: root
+    group: root
+    mode: "644"
+
+- name: "Install pip"
+  ansible.builtin.apt:
+    name:
+      - python3-pip
+    state: present
+
+- name: "Install required python packages"
+  pip:
+    name:
+      - netaddr
+      - pymongo
+    state: present
+
+- name: "Create re2o dhcp job"
+  ansible.builtin.cron:
+    name: "re2o dhcp regeneration"
+    minute: "*/2"
+    hour: "*"
+    job: "(echo `date` && cd /root/re2o-tools/ && /usr/bin/python3 /root/re2o-tools/manager.py dhcp) >> /var/log/re2o-dhcp.log"
+    state: present
