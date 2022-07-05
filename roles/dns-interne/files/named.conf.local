@@ -1,0 +1,28 @@
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+zone "rezoleo.fr" {
+	type master;
+	file "/etc/bind/hosts.db.rezoleo";
+	allow-transfer { 172.30.128.47; };
+};
+
+zone "30.172.in-addr.arpa" {
+	type master;
+	file "/etc/bind/hosts.rev.rezoleo";
+	allow-transfer { 172.30.128.47; };
+};
+
+zone "ironfork.fr" {
+	type master;
+	file "/etc/bind/hosts.db.ironfork";
+	allow-transfer { 172.30.128.47; };
+};
+
+
+

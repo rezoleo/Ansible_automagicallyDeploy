@@ -1,0 +1,302 @@
+; {{ ansible_managed }}
+;
+; SOA
+;
+@	IN	SOA	doublediamond.rezoleo.fr. root.doublediamond.rezoleo.fr. (2020121117 10800 3600 604800 86400 )
+;
+; Serveurs DNS
+;
+	IN	NS	doublediamond.rezoleo.fr.
+	IN	NS	derpy.rezoleo.fr.
+;
+; Serveurs MAIL
+;
+	IN	MX 1	mail.rezoleo.fr.
+@	IN	TXT	"rezoleo{DN$_d1gGing}"
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 	   VHOSTS EQUESTRIA	      ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+@				IN	A		172.30.0.223
+www				IN	CNAME	rezoleo.fr.
+ri				IN	CNAME	rezoleo.fr.
+rib				IN	CNAME	rezoleo.fr.
+cert			IN	CNAME	rezoleo.fr.
+poly			IN	CNAME	rezoleo.fr.
+le4				IN	CNAME	rezoleo.fr.
+re2o			IN	CNAME	rezoleo.fr.
+re2o2			IN	CNAME	rezoleo.fr.
+new-re2o		IN	CNAME	rezoleo.fr.
+rezowiki		IN	CNAME	rezoleo.fr.
+passwordreset	IN	CNAME	rezoleo.fr.
+centralisting	IN	CNAME	rezoleo.fr.
+squidguard		IN	CNAME	rezoleo.fr.
+re2ofev22		IN	CNAME	rezoleo.fr.
+	
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;        VRAC A L'ARRACHE            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+oldpoly			IN	A		172.30.0.222
+lists			IN	CNAME	mail
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;           SERVEURS REZO             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+leogw			IN	A		172.30.0.2
+pandora			IN	A		172.30.0.40
+janus			IN	A		172.30.0.42
+metis			IN	A		172.30.0.44
+novellastre		IN	A		172.30.0.46
+lantern			IN	A		172.30.0.47
+needler			IN	A		172.30.0.69
+hygie			IN	A		172.30.0.77
+pacman			IN	A		172.30.0.116
+pacfat			IN	A		172.30.0.117
+pacstore		IN	A		172.30.0.118
+pipsqueak       IN	A       172.30.0.220
+equestria		IN	A		172.30.0.221
+eclip2 			IN	A       172.30.0.222
+equestria2		IN	A		172.30.0.223
+eclip4			IN	A		172.30.0.224
+mnemosyne		IN	A		172.30.0.225
+mail			IN	A		172.30.0.226
+mendicantbias	IN	A		172.30.0.226
+heimdall		IN	A		172.30.0.230
+bigbrother		IN	A		172.30.0.231
+charon			IN	A		172.30.0.242
+
+wifi-rezoleo	IN	A		172.30.128.7
+hephaistos		IN	A		172.30.128.10
+mc				IN	A		172.30.128.10
+warden			IN	A		172.30.128.31
+doublediamond	IN	A		172.30.128.40
+celestia        IN	A		172.30.128.42
+nasrezoleo		IN	A		172.30.128.43
+lunadc    		IN	A       172.30.128.44
+cookies 		IN	A       172.30.128.45
+derpy			IN	A		172.30.128.47
+valhalla        IN	A       172.30.128.50
+sphinx			IN	A		172.30.128.78
+rookie			IN	A		172.30.128.112
+fedewifi		IN	A		172.30.128.150
+testradius		IN	A 		172.30.128.151
+argos			IN	A		172.30.128.55
+test-ansible	IN	A		172.30.128.217
+
+ruby    		IN	A       172.30.66.100
+fay     		IN	A       172.30.66.101
+erebos  		IN	A       172.30.66.102
+gaia			IN	A		172.30.66.103
+nyx				IN	A		172.30.66.104
+aqua			IN	A		172.30.66.105
+rhea			IN	A		172.30.66.106
+webdev			IN	A		172.30.66.113
+welcome 		IN	A       172.30.66.114
+sanctuary       IN	A       172.30.66.115
+
+rainbowdash		IN	A		172.30.64.121
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;             ALIAS REZO              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+mailadmin		IN	CNAME 	mail
+cadence			IN	CNAME	eclip3
+pfsense			IN	CNAME	heimdall
+vinci			IN	CNAME	lunadc
+observium		IN	CNAME	rezoleo.fr.
+librenms		IN	CNAME	rezoleo.fr.
+status			IN	CNAME	rezoleo.fr.
+monitoring      IN	CNAME   argos
+radius			IN	CNAME	welcome
+rancid			IN	CNAME	rainbowdash
+mysql			IN	CNAME	mnemosyne
+sftp			IN	CNAME	hippolyte
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;            VHOSTS ECLIP2            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+eleves			IN	CNAME	rezoleo.fr.
+centrale-killer	IN	CNAME	rezoleo.fr.
+ca-eleves		IN	CNAME	rezoleo.fr.
+bda				IN	CNAME	rezoleo.fr.
+lae				IN	CNAME	rezoleo.fr.
+cag				IN	CNAME	rezoleo.fr.
+gala			IN	CNAME	rezoleo.fr.
+fti				IN	CNAME	rezoleo.fr.
+je				IN	CNAME	rezoleo.fr.
+isf				IN	CNAME	rezoleo.fr.
+ISFNord			IN	CNAME	rezoleo.fr.
+impulsion		IN	CNAME	rezoleo.fr.
+partir			IN	CNAME	rezoleo.fr.
+paondart		IN	CNAME	rezoleo.fr.
+cheerup			IN	CNAME	rezoleo.fr.
+wizart			IN	CNAME	rezoleo.fr.
+predasport		IN	CNAME	rezoleo.fr.
+clap			IN	CNAME	rezoleo.fr.
+pubentaupe		IN	CNAME	rezoleo.fr.
+clos			IN	CNAME	rezoleo.fr.
+pyro			IN	CNAME	rezoleo.fr.
+fanfare			IN	CNAME	rezoleo.fr.
+clubtime		IN	CNAME	rezoleo.fr.
+voile			IN	CNAME	rezoleo.fr.
+dopna3			IN	CNAME	rezoleo.fr.
+pierre-yves.guerder	IN	CNAME	rezoleo.fr.
+staelios16		IN	CNAME	rezoleo.fr.
+greenbox16		IN	CNAME	rezoleo.fr.
+globenote		IN	CNAME	rezoleo.fr.
+callain			IN	CNAME	rezoleo.fr.
+artic			IN	CNAME	rezoleo.fr.
+legend_art		IN	CNAME	rezoleo.fr.
+eCowloFarm16	IN	CNAME	rezoleo.fr.
+formationhfst16	IN	CNAME	rezoleo.fr.
+centralibur16	IN	CNAME	rezoleo.fr.
+vlrnptqer		IN	CNAME	rezoleo.fr.
+arlv			IN	CNAME	rezoleo.fr.
+minosport		IN	CNAME	rezoleo.fr.
+sportorico		IN	CNAME	rezoleo.fr.
+ljakomulski		IN	CNAME	rezoleo.fr.
+tedx			IN	CNAME	rezoleo.fr.
+arlv			IN	CNAME	rezoleo.fr.
+lecameo			IN	CNAME	rezoleo.fr.
+omasse			IN	CNAME	rezoleo.fr.
+centrallgames	IN	CNAME	rezoleo.fr.
+support			IN	CNAME	rezoleo.fr.
+delphos-project	IN	CNAME	rezoleo.fr.
+tcheque			IN	CNAME	rezoleo.fr.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost equestria           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+adeq			IN	CNAME	equestria
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost gaia    	            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+cla				IN	CNAME	rezoleo.fr.
+ca-admin		IN	A		172.30.0.119
+; redirect to equestria
+clap-website	IN	A		172.30.0.120
+cag-admin		IN	A		172.30.0.121
+monicag			IN	CNAME	rezoleo.fr.
+bdi				IN	CNAME	rezoleo.fr.
+pterodactyl		IN	A		172.30.128.205
+hypolyte		IN	A		172.30.0.227
+*.hypolyte		IN	CNAME	hypolyte
+hippolyte		IN	A		172.30.0.224
+*.hippolyte		IN 	CNAME	hippolyte
+netbox			IN	CNAME	rezoleo.fr.
+ctf				IN	CNAME	rezoleo.fr.
+phpmyadmin		IN	CNAME	rezoleo.fr.
+vault			IN	CNAME	rezoleo.fr.
+definitelynotle	IN	CNAME	rezoleo.fr.
+healthchecks	IN	CNAME	rezoleo.fr.
+rezalgo			IN	CNAME	rezoleo.fr.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost aqua                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+mercure			IN	A		172.30.128.56
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Conteneurs Hermes              ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+absinthe		IN	CNAME	rezoleo.fr.
+arriddle		IN	CNAME	rezoleo.fr.
+choucroute38raclette	IN	CNAME	rezoleo.fr.
+quartz			IN	CNAME	rezoleo.fr.
+ddale			IN	CNAME	rezoleo.fr.
+bdsrico			IN	CNAME	rezoleo.fr.
+bds				IN	A		51.68.70.248
+dvc				IN	CNAME	rezoleo.fr.
+gali			IN	CNAME	rezoleo.fr.
+artlantide		IN	CNAME	rezoleo.fr.
+serreviable		IN	CNAME	ghs.googlehosted.com.
+portainer		IN	CNAME	rezoleo.fr.
+imperialille	IN	CNAME	rezoleo.fr.
+photographes	IN	CNAME	rezoleo.fr.
+fanfare-hippolyte		IN	CNAME	rezoleo.fr.
+cameo			IN	CNAME	rezoleo.fr.
+leo				IN	CNAME	rezoleo.fr.
+bde-dev			IN	CNAME	rezoleo.fr.
+t5b				IN	CNAME	rezoleo.fr.
+paingouin		IN	CNAME	rezoleo.fr.
+bde				IN	CNAME   rezoleo.fr.
+rezoleo			IN	CNAME   rezoleo.fr.
+tdnvote			IN	CNAME	rezoleo.fr.
+among-us		IN	CNAME   rezoleo.fr.
+nextcloud		IN 	CNAME	rezoleo.fr.
+awale			IN	CNAME	rezoleo.fr.
+brocolille		IN	CNAME	rezoleo.fr.
+centraleia		IN	CNAME	rezoleo.fr.
+horslillois		IN	CNAME	rezoleo.fr.
+pulsart			IN	CNAME	rezoleo.fr.
+paingouindev	IN	CNAME	rezoleo.fr.
+lat				IN	CNAME	rezoleo.fr.
+laj2022			IN	CNAME	rezoleo.fr.
+match-making	IN	CNAME	rezoleo.fr.
+expressiveddsp	IN	CNAME	rezoleo.fr.
+github-webhook-filter	IN	CNAME	rezoleo.fr.
+bioscool		IN	CNAME	rezoleo.fr.
+boursofoy		IN	CNAME	rezoleo.fr.
+guilhem			IN	CNAME	rezoleo.fr.
+coloc			IN	CNAME	rezoleo.fr.
+adrenalille		IN	CNAME	rezoleo.fr.
+artgonautes		IN	CNAME	rezoleo.fr.
+cadvisor		IN	CNAME	rezoleo.fr.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;		CTF			;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+web1-ctf		IN	CNAME	rezoleo.fr.
+web2-ctf		IN	CNAME	rezoleo.fr.
+web3-ctf		IN	CNAME	rezoleo.fr.
+web4-ctf		IN	CNAME	rezoleo.fr.
+web5-ctf		IN	CNAME	rezoleo.fr.
+web6-ctf		IN	CNAME	rezoleo.fr.
+web7-ctf		IN	CNAME	rezoleo.fr.
+data1-ctf		IN	CNAME	rezoleo.fr.
+web-jwt-1-ctf	IN	CNAME	rezoleo.fr.
+web-jwt-2-ctf	IN	CNAME	rezoleo.fr.
+web-jwt-3-ctf	IN	CNAME	rezoleo.fr.
+sensation-voyages	IN	CNAME	rezoleo.fr.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;            REDIRECTIONS               ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+discord-forma	IN	CNAME	rezoleo.fr.
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;             SWITCHES                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+swa1    		IN	A		172.30.64.11
+swa2    		IN	A		172.30.64.12
+swa3    		IN	A		172.30.64.13
+swb1    		IN	A		172.30.64.21
+swb2    		IN	A		172.30.64.22
+swb3    		IN	A		172.30.64.23
+swc1    		IN	A		172.30.64.31
+swc2    		IN	A		172.30.64.32
+swc3    		IN	A		172.30.64.33
+swd1    		IN	A		172.30.64.41
+swd2    		IN	A		172.30.64.42
+swd3    		IN	A		172.30.64.43
+swd4    		IN	A		172.30.64.44
+swd5    		IN	A		172.30.64.45
+swe1    		IN	A		172.30.64.51
+swe2    		IN	A		172.30.64.52
+swe3    		IN	A		172.30.64.53
+swe4    		IN	A		172.30.64.54
+swf1    		IN	A		172.30.64.61
+swf2    		IN	A		172.30.64.62
+swf3    		IN	A		172.30.64.63
+swf4    		IN	A		172.30.64.64
+swf5    		IN	A		172.30.64.65
+swf6			IN	A		172.30.64.66
+swacc			IN	A		172.30.64.71
+swlocal 		IN	A		172.30.64.100

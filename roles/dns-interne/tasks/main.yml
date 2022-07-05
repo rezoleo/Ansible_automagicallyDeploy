@@ -1,0 +1,33 @@
+- name: "Install dns"
+  ansible.builtin.apt:
+    update_cache: yes
+    name:
+      - bind9
+    state: present
+
+- name: "Copy bind config"
+  ansible.builtin.copy:
+    src: /
+    dest: /etc/bind
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart bind9
+
+- name: "Copy rezoleo hosts"
+  ansible.builtin.template:
+    src: hosts.db.rezoleo.j2
+    dest: /etc/bind/hosts.db.rezoleo
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart bind9
+
+- name: "Copy rezoleo rev"
+  ansible.builtin.template:
+    src: hosts.rev.rezoleo.j2
+    dest: /etc/bind/hosts.rev.rezoleo
+    owner: root
+    group: root
+    mode: "644"
+  notify: restart bind9

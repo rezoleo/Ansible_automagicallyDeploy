@@ -1,0 +1,8 @@
+@    IN SOA dns108.ovh.net. tech.ovh.net. (2019031701 86400 3600 3600000 300)
+                          IN NS     ns108.ovh.net.
+                          IN NS     dns108.ovh.net.
+
+ironfork.fr		IN	A	172.30.0.221
+
+
+
