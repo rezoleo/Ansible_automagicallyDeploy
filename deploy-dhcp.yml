@@ -1,0 +1,5 @@
+- name: "Deploy dhcp"
+  hosts: all
+  become: yes
+  roles:
+    - dhcp
