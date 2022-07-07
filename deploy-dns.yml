@@ -1,0 +1,5 @@
+- name: "Deploy a new server"
+  hosts: all
+  become: yes
+  roles:
+    - dns-interne

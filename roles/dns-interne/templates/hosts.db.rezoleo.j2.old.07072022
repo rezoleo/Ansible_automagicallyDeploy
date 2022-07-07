@@ -7,109 +7,115 @@
 ; Serveurs DNS
 ;
 	IN	NS	doublediamond.rezoleo.fr.
+	IN	NS	derpy.rezoleo.fr.
 ;
 ; Serveurs MAIL
 ;
 	IN	MX 1	mail.rezoleo.fr.
 @	IN	TXT	"rezoleo{DN$_d1gGing}"
 
-@				IN	A		10.12.2.10
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; 	   VHOSTS EQUESTRIA	      ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+@				IN	A		172.30.0.223
 www				IN	CNAME	rezoleo.fr.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;            INFRASTRUCTURE           ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-heimdall		IN	A		10.1.0.1
-leogw			IN	A		10.10.0.1
-pvelab			IN	A		10.11.0.2
-aqua			IN	A		10.11.1.1
-erebos			IN	A		10.11.1.2
-gaia			IN	A		10.12.1.3
-rhea			IN	A       10.11.1.4
-nasrezoleo		IN	A		10.12.1.3
-fay				IN	A		10.11.99.1
-ruby			IN	A		10.11.99.2
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; 	           SWITCHS                ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-swserveurs		IN	A		10.10.1.100
-swlocal			IN	A		10.10.1.101
-swa1			IN 	A		10.10.1.11
-swa2			IN	A		10.10.1.12
-swa3			IN	A		10.10.1.13
-swb1			IN	A		10.10.1.21
-swb2			IN	A		10.10.1.22
-swb3			IN	A		10.10.1.23
-swc1			IN	A		10.10.1.31
-swc2			IN	A		10.10.1.32
-swc3			IN	A		10.10.1.33
-swd1			IN	A		10.10.1.41
-swd2			IN	A		10.10.1.42
-swd3			IN	A		10.10.1.43
-swd4			IN	A		10.10.1.44
-swd5			IN	A		10.10.1.45
-swf1			IN	A		10.10.1.61
-swf2			IN	A		10.10.1.62
-swf3			IN	A		10.10.1.63
-swf4			IN	A		10.10.1.64
-swf5			IN	A		10.10.1.65
-swf6			IN	A		10.10.1.66
-swacc			IN	A		10.10.1.71
-swfoyer			IN	A		10.10.1.72
-
+ri				IN	CNAME	rezoleo.fr.
+rib				IN	CNAME	rezoleo.fr.
+cert			IN	CNAME	rezoleo.fr.
+poly			IN	CNAME	rezoleo.fr.
+le4				IN	CNAME	rezoleo.fr.
+re2o			IN	CNAME	rezoleo.fr.
+re2o2			IN	CNAME	rezoleo.fr.
+new-re2o		IN	CNAME	rezoleo.fr.
+rezowiki		IN	CNAME	rezoleo.fr.
+passwordreset	IN	CNAME	rezoleo.fr.
+centralisting	IN	CNAME	rezoleo.fr.
+squidguard		IN	CNAME	rezoleo.fr.
+re2ofev22		IN	CNAME	rezoleo.fr.
+	
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;             SERVICES               ;
+;        VRAC A L'ARRACHE            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-dhcp			IN	A		10.12.0.10
-doublediamond	IN	A		10.12.0.11
-lantern			IN	A		10.12.0.21
-radius			IN	A		10.12.0.2
-fedewifi		IN	A		10.12.0.3
+oldpoly			IN	A		172.30.0.222
+lists			IN	CNAME	mail
 
-needler			IN	A		10.12.1.1
-pacstore		IN	A		10.12.1.2
-mercure			IN	A		10.12.1.4
-metis			IN	A		10.12.1.5
-mendicantbias	IN	A		10.12.1.6
-mnemosyne		IN	A		10.12.1.7
-rainbowdash		IN	A		10.12.1.8
 
-rookie			IN	A		10.12.2.1
-equestria		IN	A		10.12.2.2
-charon			IN 	A		10.12.2.3
-janus			IN	A		10.12.2.4
-mc				IN	A		10.12.2.5
-hippolyte		IN	A		10.12.2.10
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;           SERVEURS REZO             ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-pipsqueak		IN	A		10.12.99.1
+leogw			IN	A		172.30.0.2
+pandora			IN	A		172.30.0.40
+janus			IN	A		172.30.0.42
+metis			IN	A		172.30.0.44
+novellastre		IN	A		172.30.0.46
+lantern			IN	A		172.30.0.47
+needler			IN	A		172.30.0.69
+hygie			IN	A		172.30.0.77
+pacman			IN	A		172.30.0.116
+pacfat			IN	A		172.30.0.117
+pacstore		IN	A		172.30.0.118
+pipsqueak       IN	A       172.30.0.220
+equestria		IN	A		172.30.0.221
+eclip2 			IN	A       172.30.0.222
+equestria2		IN	A		172.30.0.223
+eclip4			IN	A		172.30.0.224
+mnemosyne		IN	A		172.30.0.225
+mail			IN	A		172.30.0.226
+mendicantbias	IN	A		172.30.0.226
+heimdall		IN	A		172.30.0.230
+bigbrother		IN	A		172.30.0.231
+charon			IN	A		172.30.0.242
+
+wifi-rezoleo	IN	A		172.30.128.7
+hephaistos		IN	A		172.30.128.10
+mc				IN	A		172.30.128.10
+warden			IN	A		172.30.128.31
+doublediamond	IN	A		172.30.128.40
+celestia        IN	A		172.30.128.42
+nasrezoleo		IN	A		172.30.128.43
+lunadc    		IN	A       172.30.128.44
+cookies 		IN	A       172.30.128.45
+derpy			IN	A		172.30.128.47
+valhalla        IN	A       172.30.128.50
+sphinx			IN	A		172.30.128.78
+rookie			IN	A		172.30.128.112
+fedewifi		IN	A		172.30.128.150
+testradius		IN	A 		172.30.128.151
+argos			IN	A		172.30.128.55
+test-ansible	IN	A		172.30.128.217
+
+ruby    		IN	A       172.30.66.100
+fay     		IN	A       172.30.66.101
+erebos  		IN	A       172.30.66.102
+gaia			IN	A		172.30.66.103
+nyx				IN	A		172.30.66.104
+aqua			IN	A		172.30.66.105
+rhea			IN	A		172.30.66.106
+webdev			IN	A		172.30.66.113
+welcome 		IN	A       172.30.66.114
+sanctuary       IN	A       172.30.66.115
+
+rainbowdash		IN	A		172.30.64.121
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;             ALIAS REZO              ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-mail			IN	CNAME   mendicantbias
 mailadmin		IN	CNAME 	mail
-lists			IN	CNAME	mail
+cadence			IN	CNAME	eclip3
 pfsense			IN	CNAME	heimdall
+vinci			IN	CNAME	lunadc
+observium		IN	CNAME	rezoleo.fr.
+librenms		IN	CNAME	rezoleo.fr.
+status			IN	CNAME	rezoleo.fr.
+monitoring      IN	CNAME   argos
+radius			IN	CNAME	welcome
 rancid			IN	CNAME	rainbowdash
 mysql			IN	CNAME	mnemosyne
 sftp			IN	CNAME	hippolyte
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;             WEB INTERNE             ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-ri				IN	CNAME	rezoleo.fr.
-rib				IN	CNAME	rezoleo.fr.
-cert			IN	CNAME	rezoleo.fr.
-poly			IN	CNAME	rezoleo.fr.
-re2o			IN	CNAME	rezoleo.fr.
-centralisting	IN	CNAME	rezoleo.fr.
-squidguard		IN	CNAME	rezoleo.fr.
-librenms		IN	CNAME	rezoleo.fr.
-status			IN	CNAME	rezoleo.fr.
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;             WEB a trier             ;
+;            VHOSTS ECLIP2            ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 eleves			IN	CNAME	rezoleo.fr.
 centrale-killer	IN	CNAME	rezoleo.fr.
@@ -159,9 +165,18 @@ centrallgames	IN	CNAME	rezoleo.fr.
 support			IN	CNAME	rezoleo.fr.
 delphos-project	IN	CNAME	rezoleo.fr.
 tcheque			IN	CNAME	rezoleo.fr.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost equestria           ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 adeq			IN	CNAME	equestria
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost gaia    	            ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 cla				IN	CNAME	rezoleo.fr.
 ca-admin		IN	A		172.30.0.119
+; redirect to equestria
 clap-website	IN	A		172.30.0.120
 cag-admin		IN	A		172.30.0.121
 monicag			IN	CNAME	rezoleo.fr.
@@ -179,9 +194,15 @@ definitelynotle	IN	CNAME	rezoleo.fr.
 healthchecks	IN	CNAME	rezoleo.fr.
 rezalgo			IN	CNAME	rezoleo.fr.
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;          Vhost aqua                ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+mercure			IN	A		172.30.128.56
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;          Conteneurs Hermes         ;
+;          Conteneurs Hermes              ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 absinthe		IN	CNAME	rezoleo.fr.
@@ -229,7 +250,7 @@ artgonautes		IN	CNAME	rezoleo.fr.
 cadvisor		IN	CNAME	rezoleo.fr.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;            CTF			            ;
+;		CTF			;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 web1-ctf		IN	CNAME	rezoleo.fr.
 web2-ctf		IN	CNAME	rezoleo.fr.
@@ -243,8 +264,39 @@ web-jwt-1-ctf	IN	CNAME	rezoleo.fr.
 web-jwt-2-ctf	IN	CNAME	rezoleo.fr.
 web-jwt-3-ctf	IN	CNAME	rezoleo.fr.
 sensation-voyages	IN	CNAME	rezoleo.fr.
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;            REDIRECTIONS               ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 discord-forma	IN	CNAME	rezoleo.fr.
+
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;             SWITCHES                  ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+swa1    		IN	A		172.30.64.11
+swa2    		IN	A		172.30.64.12
+swa3    		IN	A		172.30.64.13
+swb1    		IN	A		172.30.64.21
+swb2    		IN	A		172.30.64.22
+swb3    		IN	A		172.30.64.23
+swc1    		IN	A		172.30.64.31
+swc2    		IN	A		172.30.64.32
+swc3    		IN	A		172.30.64.33
+swd1    		IN	A		172.30.64.41
+swd2    		IN	A		172.30.64.42
+swd3    		IN	A		172.30.64.43
+swd4    		IN	A		172.30.64.44
+swd5    		IN	A		172.30.64.45
+swe1    		IN	A		172.30.64.51
+swe2    		IN	A		172.30.64.52
+swe3    		IN	A		172.30.64.53
+swe4    		IN	A		172.30.64.54
+swf1    		IN	A		172.30.64.61
+swf2    		IN	A		172.30.64.62
+swf3    		IN	A		172.30.64.63
+swf4    		IN	A		172.30.64.64
+swf5    		IN	A		172.30.64.65
+swf6			IN	A		172.30.64.66
+swacc			IN	A		172.30.64.71
+swlocal 		IN	A		172.30.64.100

@@ -7,7 +7,7 @@
 
 - name: "Copy bind config"
   ansible.builtin.copy:
-    src: /
+    src: dns/
     dest: /etc/bind
     owner: root
     group: root
