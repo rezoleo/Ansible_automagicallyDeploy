@@ -13,7 +13,7 @@
 	IN	MX 1	mail.rezoleo.fr.
 @	IN	TXT	"rezoleo{DN$_d1gGing}"
 
-@				IN	A		10.12.2.10
+@				IN	A		10.12.2.2
 www				IN	CNAME	rezoleo.fr.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -49,6 +49,10 @@ swd2			IN	A		10.10.1.42
 swd3			IN	A		10.10.1.43
 swd4			IN	A		10.10.1.44
 swd5			IN	A		10.10.1.45
+swe1			IN	A		10.10.1.51
+swe1			IN	A		10.10.1.52
+swe3			IN	A		10.10.1.53
+swe4			IN	A		10.10.1.54
 swf1			IN	A		10.10.1.61
 swf2			IN	A		10.10.1.62
 swf3			IN	A		10.10.1.63
@@ -87,6 +91,8 @@ pipsqueak		IN	A		10.12.99.1
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;             ALIAS REZO              ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+ntp             IN  CNAME   needler
+dns             IN  CNAME   doublediamond
 mail			IN	CNAME   mendicantbias
 mailadmin		IN	CNAME 	mail
 lists			IN	CNAME	mail
