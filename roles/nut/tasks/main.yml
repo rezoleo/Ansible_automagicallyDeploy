@@ -1,0 +1,23 @@
+- name: "Install Network UPS tool"
+  ansible.builtin.apt:
+    name: nut
+    state: present
+
+- name: "Retrieve vault credentials for NUT"
+  ansible.builtin.set_fact:
+    admin_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.admin }}"
+    nutcli_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.nutcli }}"
+  run_once: true
+  delegate_to: localhost
+
+- name: "Configure NUT"
+  ansible.builtin.copy:
+    src: nut.conf
+    dest: /etc/nut/nut.conf
+  notify: restart nut-server
+
+- name: "Configure UPS"
+  ansible.builtin.template:
+    src: * 
+    dest: /etc/nut/
+  notify: restart nut-server
