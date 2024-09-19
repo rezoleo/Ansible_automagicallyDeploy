@@ -16,8 +16,14 @@
     dest: /etc/nut/nut.conf
   notify: restart nut-server
 
-- name: "Configure UPS"
+- name: "Configure UPS device"
   ansible.builtin.template:
-    src: * 
-    dest: /etc/nut/
+    src: ups.conf.j2 
+    dest: /etc/nut/ups.conf
+  notify: restart nut-server
+
+- name: "Configure UPS users"
+  ansible.builtin.template:
+    src: upsd.users.j2 
+    dest: /etc/nut/ups.users
   notify: restart nut-server
