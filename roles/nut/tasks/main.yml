@@ -1,5 +1,6 @@
 - name: "Install Network UPS tool"
   ansible.builtin.apt:
+    update_cache: yes
     name: nut
     state: present
 
