@@ -26,5 +26,5 @@
 - name: "Configure UPS users"
   ansible.builtin.template:
     src: upsd.users.j2 
-    dest: /etc/nut/ups.users
+    dest: /etc/nut/upsd.users
   notify: restart nut-server
