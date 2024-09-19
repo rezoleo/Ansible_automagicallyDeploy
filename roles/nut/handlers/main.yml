@@ -1,0 +1,4 @@
+- name: restart nut-server
+  service:
+    name: nut-server
+    state: restarted
