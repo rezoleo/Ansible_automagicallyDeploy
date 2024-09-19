@@ -6,3 +6,8 @@
     - monitoring
     - ntp
     - ssh-with-vault
+
+- name: "Deploy UPS monitoring"
+  hosts: ups
+  roles:
+    - nut
