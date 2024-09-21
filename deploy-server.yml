@@ -3,7 +3,7 @@
   become: true 
   roles:
     - common
-    - monitoring
+#    - monitoring
     - ntp
     - ssh-with-vault
 
