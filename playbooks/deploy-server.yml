@@ -5,7 +5,8 @@
   roles:
     - common
     - monitoring
-    - ntp
+    - role: ntp
+      when: ansible_virtualization_type != "lxc"
     - ssh
 
 - name: Deploy UPS monitoring
