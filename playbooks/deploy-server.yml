@@ -1,13 +1,14 @@
-- name: "Deploy a new server"
+---
+- name: Deploy a new server
   hosts: all
   become: true
   roles:
     - common
-#    - monitoring
+    - monitoring
     - ntp
     - ssh
 
-- name: "Deploy UPS monitoring"
+- name: Deploy UPS monitoring
   become: true
   hosts: ups
   roles:

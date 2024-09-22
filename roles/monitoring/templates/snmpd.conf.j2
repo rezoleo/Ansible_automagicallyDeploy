@@ -1,8 +1,8 @@
 # {{ ansible_managed }}
 
-sysLocation    {{ server_location }}
+sysLocation    {{ monitoring_server_location }}
 sysContact     Rezoleo <contact@rezoleo.fr>
-rouser {{ snmp_user }} authpriv
+rouser {{ monitoring_snmp_user }} authpriv
 
 # We do not want annoying "Connection from UDP: " messages in syslog.
 # If the following option is commented out, snmpd will print each incoming

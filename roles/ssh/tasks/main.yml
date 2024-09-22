@@ -1,3 +1,4 @@
+---
 - name: Install sshd
   ansible.builtin.apt:
     name:
@@ -8,15 +9,15 @@
   ansible.builtin.get_url:
     url: https://vault.rezoleo.fr/v1/ssh/public_key
     dest: /etc/ssh/trusted-user-ca-keys.pem
-    mode: '644'
-    owner: 'root'
-    force: yes
+    mode: "0644"
+    owner: root
+    force: true
 
 - name: Add CA to sshd config file
   ansible.builtin.lineinfile:
     path: /etc/ssh/sshd_config
     state: present
-    regexp: '^TrustedUserCAKeys'
+    regexp: ^TrustedUserCAKeys
     line: TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem
     validate: /usr/sbin/sshd -t -f %s
-  notify: restart sshd
+  notify: Restart sshd
