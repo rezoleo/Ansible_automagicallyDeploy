@@ -8,7 +8,7 @@ On the computer running the playbooks:
 
 On the servers:
   - a `ansible` user account with passwordless sudo (run the
-    [`create-ansible-user`](./create-ansible-user.yml) playbook for this)
+    [`create-ansible-user`](./playbooks/create-ansible-user.yml) playbook for this)
 
 ## Usage
 
