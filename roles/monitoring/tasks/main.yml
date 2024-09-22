@@ -38,13 +38,23 @@
     backup: yes
   notify: restart snmpd
 
+# Script downloaded from https://github.com/librenms/librenms-agent/blob/master/snmp/distro
+- name: "Copy distro script from LibreNMS"
+  ansible.builtin.copy:
+    src: distro
+    dest: /usr/bin/distro
+    owner: root
+    group: root
+    mode: "0755"
+  notify: restart snmpd
+
 - name: Setup SNMP v3 user
   block:
     - name: "Stop SNMP service"
       ansible.builtin.systemd:
         name: snmpd
         state: stopped
-      
+
     - name: CreateUser in /var/lib/snmp/snmpd.conf
       ansible.builtin.lineinfile:
         path: /var/lib/snmp/snmpd.conf

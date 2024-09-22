@@ -9,3 +9,6 @@ rouser {{ snmp_user }} authpriv
 # connection, which can be useful for debugging.
 
 dontLogTCPWrappersConnects yes
+
+#This line allows Observium to detect the host OS if the distro script is installed
+extend distro /usr/bin/distro
