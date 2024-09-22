@@ -75,10 +75,10 @@
     state: started
     enabled: yes
 
-- name: "Force handlers to restart snmpd for the configuration to be OK when adding in Observium"
+- name: "Force handlers to restart snmpd for the configuration to be OK when adding in LibreNMS"
   ansible.builtin.meta: flush_handlers
 
-- name: Check if device is on librenms
+- name: Check if device is on LibreNMS
   delegate_to: localhost
   become: no
   ansible.builtin.uri:
@@ -90,7 +90,7 @@
   register: get_device_results
   ignore_errors: yes
 
-- name: Add device to librenms
+- name: Add device to LibreNMS
   delegate_to: localhost
   become: no
   ansible.builtin.uri:
@@ -112,7 +112,7 @@
       cryptoalgo: AES
   when: get_device_results.json.status != 'ok'
 
-- name: Change SNMP version on librenms
+- name: Change SNMP version on LibreNMS
   delegate_to: localhost
   become: no
   ansible.builtin.uri:
