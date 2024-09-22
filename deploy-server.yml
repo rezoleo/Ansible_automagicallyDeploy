@@ -1,8 +1,14 @@
 - name: "Deploy a new server"
   hosts: all
-  become: yes
+  become: true 
   roles:
     - common
-    - monitoring
+#    - monitoring
     - ntp
     - ssh-with-vault
+
+- name: "Deploy UPS monitoring"
+  become: true 
+  hosts: ups
+  roles:
+    - nut
