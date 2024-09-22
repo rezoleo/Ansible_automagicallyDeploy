@@ -1,6 +1,8 @@
+# {{ ansible_managed }}
+
 maxretry = 3
 
-[{{ ansible_hostname }}]
+[ups-{{ ansible_hostname[0]|upper }}]
 	driver = usbhid-ups
 	port = auto
 	desc = "Onduleur du Bâtiment {{ ansible_hostname[0]|upper }}"

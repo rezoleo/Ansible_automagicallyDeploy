@@ -12,8 +12,8 @@
   delegate_to: localhost
 
 - name: "Configure NUT"
-  ansible.builtin.copy:
-    src: nut.conf
+  ansible.builtin.template:
+    src: nut.conf.j2
     dest: /etc/nut/nut.conf
   notify: restart nut-server
 
