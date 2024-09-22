@@ -73,6 +73,8 @@
   ansible.builtin.meta: flush_handlers
 
 - name: Check if device is on librenms
+  delegate_to: localhost
+  become: no
   ansible.builtin.uri:
     url: https://librenms.rezoleo.fr/api/v0/devices/{{ ansible_hostname }}
     method: GET
@@ -83,6 +85,8 @@
   ignore_errors: yes
 
 - name: Add device to librenms
+  delegate_to: localhost
+  become: no
   ansible.builtin.uri:
     url: https://librenms.rezoleo.fr/api/v0/devices
     method: POST
@@ -103,6 +107,8 @@
   when: get_device_results.json.status != 'ok'
 
 - name: Change SNMP version on librenms
+  delegate_to: localhost
+  become: no
   ansible.builtin.uri:
     url: https://librenms.rezoleo.fr/api/v0/devices/{{ ansible_hostname }}
     method: PATCH
