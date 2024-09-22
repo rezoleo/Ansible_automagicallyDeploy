@@ -55,6 +55,12 @@
         name: snmpd
         state: stopped
 
+    - name: "Remove existing SNMPv3 user(s)"
+      ansible.builtin.lineinfile:
+        path: /var/lib/snmp/snmpd.conf
+        state: absent
+        regexp: '^usmUser'
+
     - name: CreateUser in /var/lib/snmp/snmpd.conf
       ansible.builtin.lineinfile:
         path: /var/lib/snmp/snmpd.conf
