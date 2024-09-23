@@ -1,12 +1,12 @@
 # {{ ansible_managed }}
 
 [admin]
-	password = {{ admin_pass }}
+	password = {{ nut_admin_pass }}
 	upsmon master
 	actions = SET
 	instcmds = ALL
 
 [nutcli]
-	password = {{ nutcli_pass }}
+	password = {{ nut_nutcli_pass }}
 	actions = FSD
 	upsmon master

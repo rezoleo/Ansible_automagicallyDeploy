@@ -5,11 +5,19 @@
     name: snmpd
     state: present
 
-- name: Retrieve SNMPv3 password and passphrase
+- name: Retrieve SNMPv3 password and passphrase from Vault
+  community.hashi_vault.vault_kv2_get:
+    path: infrastructure/mercure
+  register: monitoring_secrets
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Set SNMPv3 password and passphrase to facts
   ansible.builtin.set_fact:
-    monitoring_snmp_authpass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_authpass') }}"
-    monitoring_snmp_cryptopass: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:snmp_cryptopass') }}"
-    monitoring_librenms_api_token: "{{ lookup('community.general.hashi_vault', 'secret=secret/data/infrastructure/mercure:librenms_api_token') }}"
+    monitoring_snmp_authpass: "{{ monitoring_secrets.secret.snmp_authpass }}"
+    monitoring_snmp_cryptopass: "{{ monitoring_secrets.secret.snmp_cryptopass }}"
+    monitoring_librenms_api_token: "{{ monitoring_secrets.secret.librenms_api_token }}"
   run_once: true
   delegate_to: localhost
   become: false

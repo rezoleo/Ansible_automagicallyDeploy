@@ -5,10 +5,18 @@
     name: nut
     state: present
 
-- name: Retrieve vault credentials for NUT
+- name: Retrieve credentials for NUT from Vault
+  community.hashi_vault.vault_kv2_get:
+    path: infrastructure/nut
+  become: false
+  run_once: true
+  delegate_to: localhost
+  register: nut_secrets
+
+- name: Set credentials for NUT to facts
   ansible.builtin.set_fact:
-    admin_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.admin }}"
-    nutcli_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.nutcli }}"
+    nut_admin_pass: "{{ nut_secrets.secret.admin }}"
+    nut_nutcli_pass: "{{ nut_secrets.secret.nutcli }}"
   become: false
   run_once: true
   delegate_to: localhost
