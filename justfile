@@ -36,8 +36,8 @@ venv:
 
 # Run ansible-lint
 [group('tooling')]
-lint:
-    {{venv_bin}}/ansible-lint
+lint *ARGS:
+    {{venv_bin}}/ansible-lint {{ARGS}}
 
 # Export information about all hosts, as gathered by Ansible (including variables)
 [group('tooling')]
