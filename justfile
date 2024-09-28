@@ -1,4 +1,5 @@
-venv_path := absolute_path(".venv")
+venv := ".venv"
+venv_path := absolute_path(venv)
 venv_bin := venv_path / "bin"
 inventory := "hosts"
 
@@ -49,4 +50,4 @@ cmdb:
 # Find TODOs and comments silencing lints
 [group('tooling')]
 todo:
-    grep --recursive --extended-regexp --ignore-case --line-number --color=always 'noqa|todo' roles playbooks
+    grep --recursive --extended-regexp --ignore-case --line-number --color=always 'noqa|todo' --exclude-dir {{venv}}
