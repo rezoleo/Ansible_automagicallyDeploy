@@ -1,0 +1,5 @@
+---
+# https://ansible.readthedocs.io/projects/lint/configuring/
+
+exclude_paths:
+  - .github

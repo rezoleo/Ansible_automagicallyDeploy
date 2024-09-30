@@ -1,31 +1,49 @@
-- name: "Install Network UPS tool"
+---
+- name: Install Network UPS tool
   ansible.builtin.apt:
-    update_cache: yes
+    update_cache: true
     name: nut
     state: present
 
-- name: "Retrieve vault credentials for NUT"
+- name: Retrieve credentials for NUT from Vault
+  community.hashi_vault.vault_kv2_get:
+    path: infrastructure/nut
+  become: false
+  run_once: true
+  delegate_to: localhost
+  register: nut_secrets
+
+- name: Set credentials for NUT to facts
   ansible.builtin.set_fact:
-    admin_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.admin }}"
-    nutcli_pass: "{{ lookup('community.hashi_vault.vault_kv2_get', 'infrastructure/nut').secret.nutcli }}"
+    nut_admin_pass: "{{ nut_secrets.secret.admin }}"
+    nut_nutcli_pass: "{{ nut_secrets.secret.nutcli }}"
   become: false
   run_once: true
   delegate_to: localhost
 
-- name: "Configure NUT"
+- name: Configure NUT
   ansible.builtin.template:
     src: nut.conf.j2
     dest: /etc/nut/nut.conf
-  notify: restart nut-server
+    owner: root
+    group: nut
+    mode: "0640"
+  notify: Restart nut-server
 
-- name: "Configure UPS device"
+- name: Configure UPS device
   ansible.builtin.template:
     src: ups.conf.j2
     dest: /etc/nut/ups.conf
-  notify: restart nut-server
+    owner: root
+    group: nut
+    mode: "0640"
+  notify: Restart nut-server
 
-- name: "Configure UPS users"
+- name: Configure UPS users
   ansible.builtin.template:
     src: upsd.users.j2
     dest: /etc/nut/upsd.users
-  notify: restart nut-server
+    owner: root
+    group: nut
+    mode: "0640"
+  notify: Restart nut-server

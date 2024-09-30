@@ -1,0 +1,16 @@
+---
+- name: Deploy a new server
+  hosts: all
+  become: true
+  roles:
+    - common
+    - monitoring
+    - role: ntp
+      when: ansible_virtualization_type != "lxc"
+    - ssh
+
+- name: Deploy UPS monitoring
+  become: true
+  hosts: ups
+  roles:
+    - nut

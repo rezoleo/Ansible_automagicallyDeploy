@@ -1,2 +1,17 @@
 .venv
+
+# Avoid leaking hosts details and variables (maybe secrets!) to GitHub
 hosts
+hosts.*
+!hosts.example
+host_vars/
+
+# Ignore ansible-cmdb files
+out/
+overview.html
+
+# Ignore ansible-lint output files
+ansible-lint.sarif.json
+
+# VSCode
+.vscode/settings.json

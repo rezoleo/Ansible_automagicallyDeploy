@@ -1,10 +1,11 @@
+---
 # Creer user
 # Le rajouter au groupe sudo
 # Configurer le sudo sans mdp
 
-- name: "Configure Ansible user sudoer without password"
+- name: Configure Ansible user sudoer without password
   hosts: all
-  become: yes
+  become: true
 
   tasks:
     - name: Create an ansible user
@@ -15,11 +16,11 @@
       ansible.posix.authorized_key:
         user: ansible
         state: present
-        key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_ed25519.pub') }}"  # TODO: lookup SSH key from Vault
+        key: "{{ lookup('file', lookup('env', 'HOME') + '/.ssh/id_ed25519.pub') }}" # TODO: lookup SSH key from Vault
 
     - name: Install sudo
       ansible.builtin.apt:
-        update_cache: yes
+        update_cache: true
         name: sudo
         state: present
 
@@ -27,5 +28,5 @@
       ansible.builtin.lineinfile:
         path: /etc/sudoers
         state: present
-        line: 'ansible ALL=(ALL) NOPASSWD: ALL'
+        line: "ansible ALL=(ALL) NOPASSWD: ALL"
         validate: /usr/sbin/visudo -cf %s
