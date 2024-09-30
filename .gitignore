@@ -12,3 +12,6 @@ overview.html
 
 # Ignore ansible-lint output files
 ansible-lint.sarif.json
+
+# VSCode
+.vscode/settings.json

@@ -59,7 +59,6 @@
 
 - name: Setup SNMP v3 user
   when: snmp_facts_results.failed
-
   block:
     - name: Stop SNMP service
       ansible.builtin.systemd:
