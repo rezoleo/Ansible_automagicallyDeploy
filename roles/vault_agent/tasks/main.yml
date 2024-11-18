@@ -63,18 +63,27 @@
   notify: Restart vault-agent-certificates
 
 - name: Copy retrieving_cert.tmpl
-  ansible.builtin.copy:
-    src: retrieving_cert.tmpl
+  ansible.builtin.template:
+    src: retrieving_cert.tmpl.j2
     dest: /root/vault_agent_certificat/retrieving_cert.tmpl
     mode: '0644'
     owner: root
     group: root
+  notify: Restart vault-agent-certificates
 
 - name: Copy vault-agent-certificates.service
   ansible.builtin.copy:
     src: vault-agent-certificates.service
     dest: /etc/systemd/system/vault-agent-certificates.service
     mode: '0644'
+    owner: root
+    group: root
+
+- name: Create directory for certificates
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ vault_agent_certificate_directory }}"
+    mode: '0755'
     owner: root
     group: root
 
