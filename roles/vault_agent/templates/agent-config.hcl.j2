@@ -30,7 +30,7 @@ auto_auth {
 
 template {
   source = "retrieving_cert.tmpl"
-  destination = "/etc/nginx/certificates/template_output" // to change based on the path of the nginx certificates
+  destination = "{{ vault_agent_certificate_directory }}/template_output"
   perms = "0600"
 
   exec {
