@@ -1,0 +1,7 @@
+<VirtualHost *:443>
+    ServerName {{ mail_web_server_name }}
+    DocumentRoot /var/www/{{ mail_web_server_name }}
+    SSLEngine on
+    SSLCertificateFile {{ mail_apache2_certificate_directory }}/fullchain.pem
+    SSLCertificateKeyFile {{ mail_apache2_certificate_directory }}/privkey.pem
+</VirtualHost>

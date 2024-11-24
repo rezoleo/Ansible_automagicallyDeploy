@@ -1,0 +1,3 @@
+mail_web_server_name: mailadmin.rezoleo.fr
+
+mail_apache2_certificate_directory: /etc/apache2/certificates
