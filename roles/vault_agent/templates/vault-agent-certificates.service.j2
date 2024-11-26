@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=notify
-WorkingDirectory=/root/vault_agent_certificat
+WorkingDirectory={{ vault_agent_working_directory }}
 ExecStart=/usr/bin/vault agent -config=agent-config.hcl
 Restart=always
 

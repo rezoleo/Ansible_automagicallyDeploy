@@ -34,7 +34,7 @@ template {
   perms = "0600"
 
   exec {
-    command = {{service_reload_command | tojson}} {# to reload the service after retrieving the certificate #}
-
+    // command used to to reload the service after retrieving the certificate, in the form of ["binary", "arg1", "arg2", ...]
+    command = {{ vault_agent_service_reload_command | tojson }}
   }
 }
