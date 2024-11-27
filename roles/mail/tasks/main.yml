@@ -1,4 +1,8 @@
 ---
+# Before running this playbook, it is needed to create a database on a remote server
+# as written here : https://workaround.org/ispmail-bookworm/prepare-the-database/.
+# If needed allow the host in the remote server's firewall.
+
 - name: Install essentials
   ansible.builtin.apt:
     update_cache: true
@@ -71,3 +75,41 @@
     src: /etc/apache2/sites-available/{{ mail_web_server_name }}-https.conf
     dest: /etc/apache2/sites-enabled/{{ mail_web_server_name }}-https.conf
     state: link
+
+- name: Retrieve mailadmin and mailserver password from Vault
+  community.hashi_vault.vault_kv2_get:
+    # This secret should have the mailserver and mailadmin keys.
+    # The values of these keys should be the passwords of the users of the same name used in the database.
+    # example path: infrastructure/server_name
+    path: "{{ mail_vault_path_to_server }}"
+  register: password_secrets
+  run_once: true
+  delegate_to: localhost
+  become: false
+
+- name: Copy Postfix virtual mappings
+  vars:
+    mail_db_mailserver_password: "{{ password_secrets.secret.mailserver }}"
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "/etc/postfix/{{ item }}"
+    mode: '0640'
+    owner: root
+    group: root
+  with_items:
+    - mysql-virtual-mailbox-domains.cf
+    - mysql-virtual-mailbox-maps.cf
+    - mysql-virtual-alias-maps.cf
+  notify: Restart Postfix
+
+- name: Ensure postfix virtual mailbox configuration
+  ansible.builtin.lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: '^{{ item }}\s*='
+    line: '{{ item }} = mysql:/etc/postfix/{{ item | regex_replace("_", "-") }}.cf'
+    state: present
+  with_items:
+    - virtual_mailbox_domains
+    - virtual_mailbox_maps
+    - virtual_alias_maps
+  notify: Restart Postfix

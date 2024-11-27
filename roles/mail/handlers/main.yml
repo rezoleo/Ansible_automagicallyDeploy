@@ -2,3 +2,8 @@
   ansible.builtin.systemd:
     name: apache2
     state: restarted
+
+- name: Restart Postfix
+  ansible.builtin.systemd:
+    name: postfix
+    state: restarted
