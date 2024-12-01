@@ -6,6 +6,14 @@
     owner: root
     checksum: sha256:cafb01beac341bf2a9ba89793e6dd2468110291adfbb6c62ed11a0cde6c09029
 
+- name: Pin Vault package
+  ansible.builtin.template:
+    src: vault.pref.j2
+    dest: /etc/apt/preferences.d/vault.pref
+    mode: '0644'
+    owner: root
+    group: root
+
 - name: Add Vault repository
   ansible.builtin.apt_repository:
     repo: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.asc] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main"
@@ -27,7 +35,7 @@
 
 - name: Create vault agent workdir
   ansible.builtin.file:
-    path: /root/vault_agent_certificat
+    path: "{{ vault_agent_working_directory }}"
     state: directory
     mode: '0755'
     owner: root
@@ -38,7 +46,7 @@
     content: "{{ certificat_secrets.secret.role_id }}"
   ansible.builtin.template:
     src: content.j2
-    dest: /root/vault_agent_certificat/role_id
+    dest: "{{ vault_agent_working_directory }}/role_id"
     mode: '0600'
     owner: root
     group: root
@@ -48,7 +56,7 @@
     content: "{{ certificat_secrets.secret.secret_id }}"
   ansible.builtin.template:
     src: content.j2
-    dest: /root/vault_agent_certificat/secret_id
+    dest: "{{ vault_agent_working_directory }}/secret_id"
     mode: '0600'
     owner: root
     group: root
@@ -56,7 +64,7 @@
 - name: Copy agent-config.hcl
   ansible.builtin.template:
     src: agent-config.hcl.j2
-    dest: /root/vault_agent_certificat/agent-config.hcl
+    dest: "{{ vault_agent_working_directory }}/agent-config.hcl"
     mode: '0644'
     owner: root
     group: root
@@ -65,7 +73,7 @@
 - name: Copy retrieving_cert.tmpl
   ansible.builtin.template:
     src: retrieving_cert.tmpl.j2
-    dest: /root/vault_agent_certificat/retrieving_cert.tmpl
+    dest: "{{ vault_agent_working_directory }}/retrieving_cert.tmpl"
     mode: '0644'
     owner: root
     group: root
@@ -74,8 +82,8 @@
   notify: Restart vault-agent-certificates
 
 - name: Copy vault-agent-certificates.service
-  ansible.builtin.copy:
-    src: vault-agent-certificates.service
+  ansible.builtin.template:
+    src: vault-agent-certificates.service.j2
     dest: /etc/systemd/system/vault-agent-certificates.service
     mode: '0644'
     owner: root
