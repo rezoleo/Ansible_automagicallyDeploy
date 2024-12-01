@@ -24,92 +24,212 @@
       - ca-certificates
     state: present
 
-- name: Make web root directory
-  ansible.builtin.file:
-    path: /var/www/{{ mail_web_server_name }}
-    state: directory
-    mode: '0755'
-    owner: www-data
-    group: www-data
+- name: Setup Apache2 and SSL
+  block:
+    - name: Make web root directory
+      ansible.builtin.file:
+        path: /var/www/{{ mail_web_server_name }}
+        state: directory
+        mode: '0755'
+        owner: www-data
+        group: www-data
 
-- name: Make apache2 certificate directory
-  ansible.builtin.file:
-    path: "{{ mail_apache2_certificate_directory }}"
-    state: directory
-    mode: '0755'
-    owner: root
-    group: root
+    - name: Make Apache2 certificate directory
+      ansible.builtin.file:
+        path: "{{ mail_apache2_certificate_directory }}"
+        state: directory
+        mode: '0755'
+        owner: root
+        group: root
 
-- name: Enable SSL module
-  community.general.apache2_module:
-    state: present
-    name: ssl
-  notify: Restart apache2
+    - name: Enable SSL module
+      community.general.apache2_module:
+        state: present
+        name: ssl
+      notify: Restart apache2
 
-- name: Copy http.conf
-  ansible.builtin.template:
-    src: http.conf.j2
-    dest: /etc/apache2/sites-available/{{ mail_web_server_name }}-http.conf
-    mode: '0644'
-    owner: root
-    group: root
-  notify: Restart apache2
+    - name: Copy http.conf
+      ansible.builtin.template:
+        src: http.conf.j2
+        dest: /etc/apache2/sites-available/{{ mail_web_server_name }}-http.conf
+        mode: '0644'
+        owner: root
+        group: root
+      notify: Restart apache2
 
-- name: Enable http site
-  ansible.builtin.file:
-    src: /etc/apache2/sites-available/{{ mail_web_server_name }}-http.conf
-    dest: /etc/apache2/sites-enabled/{{ mail_web_server_name }}-http.conf
-    state: link
+    - name: Enable http site
+      ansible.builtin.file:
+        src: /etc/apache2/sites-available/{{ mail_web_server_name }}-http.conf
+        dest: /etc/apache2/sites-enabled/{{ mail_web_server_name }}-http.conf
+        state: link
 
-- name: Copy https.conf
-  ansible.builtin.template:
-    src: https.conf.j2
-    dest: /etc/apache2/sites-available/{{ mail_web_server_name }}-https.conf
-    mode: '0644'
-    owner: root
-    group: root
-  notify: Restart apache2
+    - name: Copy https.conf
+      ansible.builtin.template:
+        src: https.conf.j2
+        dest: /etc/apache2/sites-available/{{ mail_web_server_name }}-https.conf
+        mode: '0644'
+        owner: root
+        group: root
+      notify: Restart apache2
 
-- name: Enable https site
-  ansible.builtin.file:
-    src: /etc/apache2/sites-available/{{ mail_web_server_name }}-https.conf
-    dest: /etc/apache2/sites-enabled/{{ mail_web_server_name }}-https.conf
-    state: link
+    - name: Enable https site
+      ansible.builtin.file:
+        src: /etc/apache2/sites-available/{{ mail_web_server_name }}-https.conf
+        dest: /etc/apache2/sites-enabled/{{ mail_web_server_name }}-https.conf
+        state: link
 
-- name: Retrieve mailadmin and mailserver password from Vault
-  community.hashi_vault.vault_kv2_get:
-    # This secret should have the mailserver and mailadmin keys.
-    # The values of these keys should be the passwords of the users of the same name used in the database.
-    # example path: infrastructure/server_name
-    path: "{{ mail_vault_path_to_server }}"
-  register: password_secrets
-  run_once: true
-  delegate_to: localhost
-  become: false
+- name: Setup Postfix
+  block:
+    - name: Retrieve mailadmin and mailserver password from Vault
+      community.hashi_vault.vault_kv2_get:
+        # This secret should have the mailserver and mailadmin keys.
+        # The values of these keys should be the passwords of the users of the same name used in the database.
+        # example path: infrastructure/server_name
+        path: "{{ mail_vault_path_to_server }}"
+      register: password_secrets
+      run_once: true
+      delegate_to: localhost
+      become: false
 
-- name: Copy Postfix virtual mappings
-  vars:
-    mail_db_mailserver_password: "{{ password_secrets.secret.mailserver }}"
-  ansible.builtin.template:
-    src: "{{ item }}.j2"
-    dest: "/etc/postfix/{{ item }}"
-    mode: '0640'
-    owner: root
-    group: root
-  with_items:
-    - mysql-virtual-mailbox-domains.cf
-    - mysql-virtual-mailbox-maps.cf
-    - mysql-virtual-alias-maps.cf
-  notify: Restart Postfix
+    - name: Copy Postfix virtual mappings
+      vars:
+        mail_db_mailserver_password: "{{ password_secrets.secret.mailserver }}"
+      ansible.builtin.template:
+        src: "{{ item }}.j2"
+        dest: "/etc/postfix/{{ item }}"
+        mode: '0640'
+        owner: root
+        group: root
+      with_items:
+        - mysql-virtual-mailbox-domains.cf
+        - mysql-virtual-mailbox-maps.cf
+        - mysql-virtual-alias-maps.cf
+      notify: Restart Postfix
 
-- name: Ensure postfix virtual mailbox configuration
-  ansible.builtin.lineinfile:
-    path: /etc/postfix/main.cf
-    regexp: '^{{ item }}\s*='
-    line: '{{ item }} = mysql:/etc/postfix/{{ item | regex_replace("_", "-") }}.cf'
-    state: present
-  with_items:
-    - virtual_mailbox_domains
-    - virtual_mailbox_maps
-    - virtual_alias_maps
-  notify: Restart Postfix
+    - name: Ensure postfix virtual mailbox configuration
+      ansible.builtin.lineinfile:
+        path: /etc/postfix/main.cf
+        regexp: '^{{ item }}\s*='
+        line: '{{ item }} = mysql:/etc/postfix/{{ item | regex_replace("_", "-") }}.cf'
+        state: present
+      with_items:
+        - virtual_mailbox_domains
+        - virtual_mailbox_maps
+        - virtual_alias_maps
+      notify: Restart Postfix
+
+- name: Setup Dovecot
+  block:
+    - name: Create virtual mailboxer owner group
+      ansible.builtin.group:
+        name: vmail
+        gid: 5000
+        state: present
+
+    - name: Create virtual mailboxes owner user
+      ansible.builtin.user:
+        name: vmail
+        uid: 5000
+        group: vmail
+        create_home: true
+        home: /var/vmail
+        state: present
+
+    - name: Change vmail home mode
+      ansible.builtin.file:
+        path: /var/vmail
+        state: directory
+        mode: '0755'
+        owner: vmail
+        group: vmail
+
+    - name: Ensure correct auth_mecanism for Outlook users
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-auth.conf"
+        regexp: '^auth_mechanisms\s*='
+        line: 'auth_mechanisms = plain login'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Comment all !include lines except auth-sql.conf.ext
+      ansible.builtin.replace:
+        path: "{{ mail_dovecot_conf_directory }}/10-auth.conf"
+        regexp: '^(?!!include auth-sql\.conf\.ext)(?<!#)!include (.+)'
+        replace: '#!include \1'
+      notify: Restart Dovecot
+
+    - name: Uncomment the auth-sql.conf.ext line if necessary
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-auth.conf"
+        regexp: '^#?!include auth-sql\.conf\.ext'
+        line: '!include auth-sql.conf.ext'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Ensure mail_location is set to maildir:~/Maildir
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-mail.conf"
+        regexp: '^#?mail_location =.*'
+        line: 'mail_location = maildir:~/Maildir'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Ensure mail_plugins is set to quota
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-mail.conf"
+        regexp: '^#?mail_plugins =.*'
+        line: 'mail_plugins = quota'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Copy 10-master.conf
+      ansible.builtin.copy:
+        src: 10-master.conf
+        dest: "{{ mail_dovecot_conf_directory }}/10-master.conf"
+        mode: '0644'
+        owner: root
+        group: root
+      notify: Restart Dovecot
+
+    - name: Ensure TLS encryption
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-ssl.conf"
+        regexp: '^ssl\s*='
+        line: 'ssl = required'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Ensure SSL certificate is set
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-ssl.conf"
+        regexp: '^ssl_cert\s*='
+        line: 'ssl_cert = <{{ mail_apache2_certificate_directory }}/fullchain.pem'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Ensure SSL key is set
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/10-ssl.conf"
+        regexp: '^ssl_key\s*='
+        line: 'ssl_key = <{{ mail_apache2_certificate_directory }}/privkey.pem'
+        state: present
+      notify: Restart Dovecot
+
+    - name: Configure Dovecot SQL
+      ansible.builtin.blockinfile:
+        path: "/etc/dovecot/dovecot-sql.conf.ext"
+        block: |
+          driver = mysql
+          connect = host={{ mail_db_host }} dbname=mailserver user=mailserver password={{ password_secrets.secret.mailserver }}
+          password_query = SELECT password FROM virtual_users WHERE email='%u'
+          iterate_query = SELECT email AS user FROM virtual_users
+        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOVECOT SQL"
+      notify: Restart Dovecot
+
+    - name: Ensure Dovecot auth-sql.conf.ext permissions are correctly set
+      ansible.builtin.file:
+        path: /etc/dovecot/dovecot-sql.conf.ext
+        state: file
+        mode: '0600'
+        owner: root
+        group: root
