@@ -118,6 +118,13 @@
         - virtual_alias_maps
       notify: Restart Postfix
 
+    - name: Ensure connexion with Dovecot
+      ansible.builtin.lineinfile:
+        path: /etc/postfix/main.cf
+        regexp: '^virtual_transport\s*='
+        line: 'virtual_transport = lmtp:unix:private/dovecot-lmtp'
+      notify: Restart Postfix
+
 - name: Setup Dovecot
   block:
     - name: Create virtual mailboxer owner group
@@ -233,3 +240,10 @@
         mode: '0600'
         owner: root
         group: root
+
+    - name: Ensure sieve plugin for LMTP
+      ansible.builtin.lineinfile:
+        path: "{{ mail_dovecot_conf_directory }}/20-lmtp.conf"
+        regexp: '^\s*?#?mail_plugins\s*='
+        line: '  mail_plugins = $mail_plugins sieve'
+      notify: Restart Dovecot
