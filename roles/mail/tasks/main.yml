@@ -25,6 +25,11 @@
       - dovecot-managesieved
       - dovecot-lmtpd
       - ca-certificates
+      - roundcube
+      - roundcube-plugins
+      - roundcube-plugins-extra
+      - roundcube-mysql
+      - rsyslog
     state: present
 
 - name: Setup Apache2 and SSL
@@ -109,23 +114,22 @@
         - mysql-virtual-alias-maps.cf
       notify: Restart Postfix
 
-    - name: Ensure postfix virtual mailbox configuration
-      ansible.builtin.lineinfile:
-        path: /etc/postfix/main.cf
-        regexp: '^{{ item }}\s*='
-        line: '{{ item }} = mysql:/etc/postfix/{{ item | regex_replace("_", "-") }}.cf'
-        state: present
-      with_items:
-        - virtual_mailbox_domains
-        - virtual_mailbox_maps
-        - virtual_alias_maps
+    - name: Copy Postfix main configuration
+      ansible.builtin.template:
+        src: main.cf.j2
+        dest: /etc/postfix/main.cf
+        mode: '0644'
+        owner: root
+        group: root
       notify: Restart Postfix
 
-    - name: Ensure connexion with Dovecot
-      ansible.builtin.lineinfile:
-        path: /etc/postfix/main.cf
-        regexp: '^virtual_transport\s*='
-        line: 'virtual_transport = lmtp:unix:private/dovecot-lmtp'
+    - name: Copy Postfix master configuration
+      ansible.builtin.template:
+        src: master.cf.j2
+        dest: /etc/postfix/master.cf
+        mode: '0644'
+        owner: root
+        group: root
       notify: Restart Postfix
 
 - name: Setup Dovecot
@@ -252,3 +256,32 @@
         regexp: '^\s*?#?mail_plugins\s*='
         line: '  mail_plugins = $mail_plugins sieve'
       notify: Restart Dovecot
+
+- name: Configure Roundcube
+  block:
+    - name: Copy Roundcube configuration
+      vars:
+        mail_roundcube_des_key: "{{ password_secrets.secret.roundcube_des_key }}"
+      ansible.builtin.template:
+        src: config.inc.php.j2
+        dest: /etc/roundcube/config.inc.php
+        mode: '0644'
+        owner: root
+        group: root
+
+    - name: Copy Roundcube password plugin configuration
+      vars:
+        mail_db_mailadmin_password: "{{ password_secrets.secret.mailadmin }}"
+      ansible.builtin.template:
+        src: password/config.inc.php.j2
+        dest: /etc/roundcube/plugins/password/config.inc.php
+        mode: '0640'
+        owner: root
+        group: www-data
+
+    - name: Configure Roundcube managesieve plugin
+      ansible.builtin.lineinfile:
+        path: /etc/roundcube/plugins/managesieve/config.inc.php
+        regexp: '^\$config'
+        line: "$config['managesieve_host'] = 'localhost';"
+        state: present
