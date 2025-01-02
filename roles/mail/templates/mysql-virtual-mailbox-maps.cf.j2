@@ -1,0 +1,5 @@
+user = mailserver
+password = {{ mail_db_mailserver_password }}
+hosts = {{  mail_db_host }}
+dbname = mailserver
+query = SELECT 1 FROM virtual_users WHERE email='%s'

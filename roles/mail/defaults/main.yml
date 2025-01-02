@@ -1,0 +1,7 @@
+mail_web_server_name: mailadmin.rezoleo.fr
+
+mail_apache2_certificate_directory: /etc/apache2/certificates
+
+mail_db_host: mysql.rezoleo.fr
+
+mail_dovecot_conf_directory: /etc/dovecot/conf.d
