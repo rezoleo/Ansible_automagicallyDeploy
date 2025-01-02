@@ -89,13 +89,24 @@
     owner: root
     group: root
 
+- name: Create read-acces group
+  ansible.builtin.group:
+    name: "{{ vault_agent_group_name }}"
+
+- name: Add users to the created group
+  ansible.builtin.user:
+    name: "{{ item }}"
+    groups: "{{ vault_agent_group_name }}"
+    append: true
+  loop: "{{ vault_agent_users }}"
+
 - name: Create directory for certificates
   ansible.builtin.file:
     state: directory
     dest: "{{ vault_agent_certificate_directory }}"
     mode: '0755'
     owner: root
-    group: root
+    group: "{{ vault_agent_group_name }}"
 
 - name: Start vault-agent-certificates service
   ansible.builtin.systemd:
@@ -103,3 +114,11 @@
     state: started
     enabled: true
     daemon_reload: true
+
+- name: Add symbolic links
+  ansible.builtin.file:
+    src: "{{ vault_agent_certificate_directory }}/{{ item.keys() | list | first }}.pem"  # TODO: attention à / si déjà dans la variable
+    dest: "{{ item.values() | list | first }}"  # Path in value
+    state: link
+    force: true
+  loop: "{{ vault_agent_links }}"
