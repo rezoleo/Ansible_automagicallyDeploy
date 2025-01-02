@@ -89,13 +89,17 @@
     owner: root
     group: root
 
+- name: Create read-acces group
+  ansible.builtin.group:
+    name: "{{ vault_agent_group_name }}"
+
 - name: Create directory for certificates
   ansible.builtin.file:
     state: directory
     dest: "{{ vault_agent_certificate_directory }}"
     mode: '0755'
     owner: root
-    group: root
+    group: "{{ vault_agent_group_name }}"
 
 - name: Start vault-agent-certificates service
   ansible.builtin.systemd:
