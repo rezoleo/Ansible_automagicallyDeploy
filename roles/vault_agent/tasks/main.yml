@@ -115,6 +115,17 @@
     enabled: true
     daemon_reload: true
 
+- name: Create symlink directories
+  ansible.builtin.file:
+    state: directory
+    dest: "{{ vault_directory }}"
+    mode: '0755'
+    owner: root
+    group: "{{ vault_agent_group_name }}"
+  loop: "{{ vault_agent_links }}"
+  vars:
+    vault_directory: "{{ (item.values() | list | first).split('/')[:-1] | join('/') }}" # {{ path.split('/')[:-1] | join('/') }}
+
 - name: Add symbolic links
   ansible.builtin.file:
     src: "{{ vault_agent_certificate_directory }}/{{ item.keys() | list | first }}.pem"  # TODO: attention à / si déjà dans la variable
