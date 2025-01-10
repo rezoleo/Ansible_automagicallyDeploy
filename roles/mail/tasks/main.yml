@@ -107,11 +107,12 @@
         dest: "/etc/postfix/{{ item }}"
         mode: '0640'
         owner: root
-        group: root
+        group: postfix
       with_items:
         - mysql-virtual-mailbox-domains.cf
         - mysql-virtual-mailbox-maps.cf
         - mysql-virtual-alias-maps.cf
+        - mysql-email2email.cf
       notify: Restart Postfix
 
     - name: Copy Postfix main configuration
@@ -229,26 +230,16 @@
         state: present
       notify: Restart Dovecot
 
-    - name: Configure Dovecot SQL
-      ansible.builtin.blockinfile:
-        path: "/etc/dovecot/dovecot-sql.conf.ext"
-        block: |
-          driver = mysql
-          connect = host={{ mail_db_host }} dbname=mailserver user=mailserver password={{ password_secrets.secret.mailserver }}
-          password_query = SELECT password FROM virtual_users WHERE email='%u'
-          iterate_query = SELECT email AS user FROM virtual_users
-          user_query = SELECT email as user, concat('*:bytes=', quota) AS quota_rule, '/var/vmail/%d/%n' AS home, \
-            5000 AS uid, 5000 AS gid FROM virtual_users WHERE email='%u'
-        marker: "# {mark} ANSIBLE MANAGED BLOCK - DOVECOT SQL"
-      notify: Restart Dovecot
-
-    - name: Ensure Dovecot auth-sql.conf.ext permissions are correctly set
-      ansible.builtin.file:
-        path: /etc/dovecot/dovecot-sql.conf.ext
-        state: file
+    - name: Copy dovecot-sql.conf.ext
+      vars:
+        mail_db_mailserver_password: "{{ password_secrets.secret.mailserver }}"
+      ansible.builtin.template:
+        src: dovecot-sql.conf.ext.j2
+        dest: /etc/dovecot/dovecot-sql.conf.ext
         mode: '0600'
         owner: root
         group: root
+      notify: Restart Dovecot
 
     - name: Ensure sieve plugin for LMTP
       ansible.builtin.lineinfile:
